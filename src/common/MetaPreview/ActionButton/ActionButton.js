@@ -7,7 +7,7 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const Button = require('stremio/common/Button');
 const styles = require('./styles');
 
-const ActionButton = ({ className, icon,iconCustom, label, ...props }) => {
+const ActionButton = ({ className, icon, iconCustom, label, ...props }) => {
     return (
         <Button title={label} {...props} className={classnames(className, styles['action-button-container'], { 'wide': typeof label === 'string' })}>
             {
@@ -35,7 +35,8 @@ const ActionButton = ({ className, icon,iconCustom, label, ...props }) => {
 ActionButton.propTypes = {
     className: PropTypes.string,
     icon: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string,
+    iconCustom: PropTypes.node
 };
 
 module.exports = ActionButton;

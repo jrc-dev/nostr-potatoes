@@ -9,7 +9,7 @@ const { useServices } = require('stremio/services');
 const Button = require('stremio/common/Button');
 const useFullscreen = require('stremio/common/useFullscreen');
 const useProfile = require('stremio/common/useProfile');
-const useTorrent = require('stremio/common/useTorrent');
+//const useTorrent = require('stremio/common/useTorrent');
 const { withCoreSuspender } = require('stremio/common/CoreSuspender');
 const styles = require('./styles');
 
@@ -17,7 +17,7 @@ const NavMenuContent = ({ onClick }) => {
     const { t } = useTranslation();
     const { core } = useServices();
     const profile = useProfile();
-    const { createTorrentFromMagnet } = useTorrent();
+    //const { createTorrentFromMagnet } = useTorrent();
     const [fullscreen, requestFullscreen, exitFullscreen] = useFullscreen();
     const logoutButtonOnClick = React.useCallback(() => {
         core.transport.dispatch({
@@ -27,14 +27,14 @@ const NavMenuContent = ({ onClick }) => {
             }
         });
     }, []);
-    const onPlayMagnetLinkClick = React.useCallback(async () => {
-        try {
-            const clipboardText = await navigator.clipboard.readText();
-            createTorrentFromMagnet(clipboardText);
-        } catch(e) {
-            console.error(e);
-        }
-    }, []);
+    // const onPlayMagnetLinkClick = React.useCallback(async () => {
+    //     try {
+    //         const clipboardText = await navigator.clipboard.readText();
+    //         createTorrentFromMagnet(clipboardText);
+    //     } catch(e) {
+    //         console.error(e);
+    //     }
+    // }, []);
     return (
         <div className={classnames(styles['nav-menu-container'], 'animation-fade-in')} onClick={onClick}>
             <div className={styles['user-info-container']}>
