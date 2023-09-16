@@ -12,7 +12,8 @@
         "YT": "readonly",
         "FB": "readonly",
         "cast": "readonly",
-        "chrome": "readonly"
+        "chrome": "readonly",
+        "BigInt":true
     },
     "env": {
         "node": true,

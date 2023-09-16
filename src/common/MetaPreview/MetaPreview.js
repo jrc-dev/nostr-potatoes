@@ -5,7 +5,6 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const UrlUtils = require('url');
 const { useTranslation } = require('react-i18next');
-const { default: Icon } = require('@stremio/stremio-icons/react');
 const Button = require('stremio/common/Button');
 const Image = require('stremio/common/Image');
 const ModalDialog = require('stremio/common/ModalDialog');
@@ -29,22 +28,22 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = ({ className, compact, id, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }) => {
+const MetaPreview = ({ className, compact, id, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams }) => {
     const { t } = useTranslation();
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const [voteModalOpen, openVoteModal, closeVoteModal] = useBinaryState(false);
     const [windowBox, openWinBox, closeWinBox] = useBinaryState(false);
-    const [data, setData] = React.useState(null);
-    
+    const [_, setData] = React.useState(null);
+
     const handleOpenVoteModalClick = async () => {
         const getPublicKey = await Nostr.Wallet.getPublicKey();
         if (getPublicKey) {
-            openVoteModal()
+            openVoteModal();
         }
     };
 
     const handleOpenWinBoxClick = async () => {
-        openWinBox()
+        openWinBox();
     };
 
     const linksGroups = React.useMemo(() => {
@@ -95,27 +94,27 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
 
     React.useEffect(() => {
         calculateAverage();
-        document.addEventListener("rateChanged", calculateAverage);
+        document.addEventListener('rateChanged', calculateAverage);
         return () => {
             // Remove the event listener when the component unmounts
-            document.removeEventListener("rateChanged", calculateAverage);
+            document.removeEventListener('rateChanged', calculateAverage);
         };
     }, [id]);
 
     const calculateAverage = () => {
-        linksGroups.set("nostr", {
-            label: "loading",
-            href: `https://www.stremio.com/warning}`
+        linksGroups.set('nostr', {
+            label: 'loading',
+            href: 'https://www.stremio.com/warning}'
         });
         setData(Date.now());
         Nostr.Review.calculateAverage({ id }).then((average) => {
-            linksGroups.set("nostr", {
+            linksGroups.set('nostr', {
                 label: average.toFixed(1),
-                href: `https://www.stremio.com/warning}`
+                href: 'https://www.stremio.com/warning}'
             });
             setData(Date.now());
         });
-    }
+    };
 
     const showHref = React.useMemo(() => {
         return deepLinks ?
@@ -211,13 +210,13 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                                 linksGroups.has(CONSTANTS.NOSTR_LINK_CATEGORY) ?
                                     <Button
                                         className={styles['imdb-button-container']}
-                                        title={"Yes, for now this will be very slow, We're not using server side solution or cached results."}
+                                        title={'Yes, for now this will be very slow, We\'re not using server side solution or cached results.'}
                                         onClick={handleOpenVoteModalClick}
                                         {...(compact ? { tabIndex: -1 } : null)}
                                     >
                                         <span className={styles['nostr-label']}>NOSTR</span>
                                         <div className={styles['label']}>
-                                            {linksGroups.get(CONSTANTS.NOSTR_LINK_CATEGORY).label == "loading" ? <div className={styles['loading']} /> : linksGroups.get(CONSTANTS.NOSTR_LINK_CATEGORY).label}
+                                            {linksGroups.get(CONSTANTS.NOSTR_LINK_CATEGORY).label === 'loading' ? <div className={styles['loading']} /> : linksGroups.get(CONSTANTS.NOSTR_LINK_CATEGORY).label}
                                         </div>
                                     </Button>
                                     :
@@ -255,8 +254,8 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                 {
                     !compact && <ActionButton
                         className={styles['action-button']}
-                        iconCustom={"🪺"}
-                        label={"Start Nest"}
+                        iconCustom={'🪺'}
+                        label={'Start Nest'}
                         tabIndex={compact ? -1 : 0}
                         onClick={handleOpenWinBoxClick}
                     />
@@ -340,7 +339,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                                 className={styles['share-prompt']}
                                 id={id}
                                 name={name}
-                                year={released instanceof Date && !isNaN(released.getTime()) ? released.getFullYear() : ""}
+                                year={released instanceof Date && !isNaN(released.getTime()) ? released.getFullYear() : ''}
                                 background={background ? background : logo}
                                 closeVoteModal={closeVoteModal}
                             />
@@ -352,11 +351,11 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
             {
                 windowBox && (
                     <WinBox
-                        title="Nostr Nests"
+                        title='Nostr Nests'
                         width={500}
                         height={600}
-                        x="center"
-                        y="center"
+                        x='center'
+                        y='center'
                         min={false}
                         noClose={false}
                         customControls={IconsTable}
@@ -364,10 +363,10 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                             setTimeout(() => {
                                 closeWinBox();
                             });
-                          }}
+                        }}
                     >
                         <div>
-                            <iframe src="https://nostrnests.com/nostrpotatos" ></iframe>
+                            <iframe src='https://nostrnests.com/nostrpotatos' ></iframe>
                         </div>
                     </WinBox>
                 )
@@ -380,6 +379,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
 MetaPreview.Placeholder = MetaPreviewPlaceholder;
 
 MetaPreview.propTypes = {
+    id: PropTypes.string,
     className: PropTypes.string,
     compact: PropTypes.bool,
     name: PropTypes.string,
