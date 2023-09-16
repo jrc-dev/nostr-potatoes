@@ -1,3 +1,6 @@
+// Copyright (C) 2017-2023 Smart code 203358507
+// Copyright JRC DEV 2017-2023
+
 const { getEventHash } = require('nostr-tools');
 
 function Wallet() {

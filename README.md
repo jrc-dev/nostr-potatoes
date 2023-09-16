@@ -16,27 +16,13 @@
 - **Community-Driven:** Join a community of like-minded individuals passionate about freedom, tech, film and television. Engage in discussions, contribute reviews, and connect with others who share your interests.
 
 
-## Navigating the Cultural War and Review Manipulation
+## Why ?
 
 In the world of entertainment, reviews can be a battleground for differing opinions and cultural narratives. It's not uncommon to encounter instances where movies and series become embroiled in what's often referred to as the "cultural war," where diverse perspectives clash.
 
-### The Influence of Companies
-
 **Corporate interests** often play a significant role in shaping the perception of movies and series. Some companies may attempt to influence reviews to promote their content or downplay negative feedback. Understanding these dynamics can help users make informed choices.
 
-### The Role of Critics
-
 **Critics and reviewers** also carry significant weight in shaping public opinion. While many critics offer thoughtful, unbiased analysis, some may have **ideological or biased motivations** that influence their reviews. It's essential to approach reviews with a critical eye and consider multiple viewpoints.
-
-### The Phenomenon of Review Bombing
-
-One challenging aspect of the cultural war is the phenomenon known as **"review bombing."** In review bombing, groups with specific agendas attempt to manipulate review scores by artificially inflating or deflating ratings. Nostr Reviews is committed to maintaining a fair and transparent review environment, and we actively address review bombing to ensure the integrity of our platform.
-
-At Nostr Reviews, we prioritize the voices of our diverse user community and provide tools and mechanisms to **curate and personalize** your review experience. By connecting with users who share your interests and values, you can find reviews and ratings that resonate with your unique perspective.
-
-We encourage our users to engage in respectful discussions and consider various viewpoints, fostering a more inclusive and open dialogue about the content we love.
-
-Join us in the pursuit of unbiased, honest, and constructive reviews that empower viewers and celebrate the richness of the cinematic and television world.
 
 
 ## Build

@@ -1,3 +1,5 @@
+// Copyright (C) 2017-2023 Smart code 203358507
+// Copyright JRC DEV 2017-2023
 function Tmdb() {
     this.getTmdbIdFromImdbId = async function(imdbId, apiKey="cb71e9b77e235cc81545a65d11a19ebb") {
         const tmdbUrl = `https://api.themoviedb.org/3/find/${imdbId}?external_source=imdb_id&api_key=${apiKey}`;
