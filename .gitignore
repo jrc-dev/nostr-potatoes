@@ -1,0 +1,6 @@
+/node_modules
+/build
+/yarn.lock
+/npm-debug.log
+.DS_Store
+.passwords

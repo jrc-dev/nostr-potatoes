@@ -1,0 +1,249 @@
+// Copyright (C) 2017-2023 Smart code 203358507
+
+@import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
+@import (reference) '~stremio/common/screen-sizes.less';
+
+.meta-preview-container {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+
+    &.compact {
+        .meta-info-container {
+
+            .logo,
+            .logo-placeholder {
+                width: 100%;
+                height: 6rem;
+            }
+
+            .runtime-release-info-container {
+                justify-content: space-between;
+
+                .runtime-label,
+                .release-info-label {
+                    margin: 1rem 0.4rem;
+                }
+            }
+
+            .description-container {
+                max-height: none;
+            }
+        }
+
+        .action-buttons-container {
+            justify-content: space-between;
+
+            .action-button:not(:last-child) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .background-image-layer {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        bottom: -10px;
+        left: -10px;
+        z-index: -1;
+
+        .background-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: blur(10px);
+            opacity: 0.3;
+        }
+    }
+
+    .meta-info-container {
+        flex: 1;
+        align-self: stretch;
+        overflow-y: auto;
+
+        &:not(:hover) {
+            scrollbar-color: transparent transparent;
+
+            &::-webkit-scrollbar-thumb,
+            &::-webkit-scrollbar-track {
+                background-color: transparent;
+            }
+        }
+
+        .logo,
+        .logo-placeholder {
+            display: block;
+            max-width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            height: 9rem;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .logo-placeholder {
+            font-size: 1.7rem;
+            color: @color-surface-light5-90;
+        }
+
+        .runtime-release-info-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+
+            .runtime-label,
+            .release-info-label {
+                flex: 0 1 auto;
+                margin-right: 3rem;
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: var(--primary-foreground-color);
+            }
+
+            .imdb-button-container {
+                flex: 0 1 auto;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                border-radius: 2.5rem;
+
+                &:focus {
+                    outline: none;
+                    border: var(--focus-outline-size) solid @color-surface-light5;
+                }
+
+                .label {
+                    flex: 0 1 auto;
+                    margin-right: 1rem;
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: var(--primary-foreground-color);
+                }
+
+                .icon {
+                    flex: none;
+                    width: 3rem;
+                    height: 3rem;
+                    color: var(--color-imdb);
+                }
+            }
+
+            .nostr-label {
+                font-size: larger;
+                color: darkgray;
+                font-weight: 600;
+                font-family: cursive;
+                padding-right: 10px;
+            }
+        }
+
+        .description-container {
+            max-height: 6em;
+            margin-top: 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 2em;
+            color: var(--primary-foreground-color);
+        }
+
+        .meta-links {
+            margin-top: 1.5rem;
+        }
+    }
+
+    .action-buttons-container {
+        flex: none;
+        align-self: stretch;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: 10rem;
+
+        .action-button {
+            flex: none;
+            width: 4rem;
+            height: 4rem;
+            margin-bottom: 1rem;
+
+            &:global(.wide) {
+                width: auto;
+                padding: 0 2rem;
+                border-radius: 4rem;
+            }
+
+            &:not(:last-child) {
+                margin-right: 1rem;
+            }
+        }
+    }
+
+    .loading {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 1px;
+        border: 3px solid rgba(255, 255, 255, .3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        -webkit-animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes spin {
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+}
+
+.share-prompt {
+    width: 24rem;
+}
+
+@media only screen and (max-width: @minimum) {
+    .meta-preview-container {
+        .meta-info-container {
+            .logo {
+                margin: 2rem auto;
+            }
+
+            .runtime-release-info-container {
+                justify-content: space-between;
+
+                .runtime-label,
+                .release-info-label {
+                    margin: 0;
+                }
+            }
+        }
+
+        .action-buttons-container {
+            flex-wrap: nowrap;
+            margin-top: 3rem;
+            overflow-x: visible;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    .share-prompt {
+        width: 100%;
+    }
+}

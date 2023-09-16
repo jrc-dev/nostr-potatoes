@@ -1,0 +1,163 @@
+// Copyright (C) 2017-2023 Smart code 203358507
+
+@import (reference) '~stremio/common/screen-sizes.less';
+@import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
+
+@font-face {
+    font-family: 'PlusJakartaSans';
+    src: url('/fonts/PlusJakartaSans.ttf') format('truetype');
+}
+
+:global {
+    @import (once, less) '~stremio/common/animations.less';
+    @import (once, less) '~stremio-router/styles.css';
+}
+
+:root {
+    --landscape-shape-ratio: 0.5625;
+    --poster-shape-ratio: 1.464;
+    --scroll-bar-size: 6px;
+    --horizontal-nav-bar-size: 5.5rem;
+    --vertical-nav-bar-size: 6rem;
+    --focus-outline-size: 2px;
+    --color-facebook: #1877F1;
+    --color-twitter: #1DA1F2;
+    --color-nostr: purple;
+    --color-imdb: #f5c518;
+    --color-placeholder: #60606080;
+    --color-placeholder-text: @color-surface-50;
+    --color-placeholder-background: @color-surface-dark5-20;
+    --primary-background-color: rgba(12, 11, 17, 1);
+    --secondary-background-color: rgba(26, 23, 62, 1);
+    --primary-foreground-color: rgba(255, 255, 255, 0.9);
+    --secondary-foreground-color: rgb(12, 11, 17, 1);
+    --primary-accent-color: rgb(123, 91, 245);
+    --secondary-accent-color: rgba(34, 179, 101, 1);
+    --tertiary-accent-color: rgba(246, 199, 0, 1);
+    --overlay-color: rgba(255, 255, 255, 0.05);
+    --modal-background-color: rgba(15, 13, 32, 1);
+    --border-radius: 0.75rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    list-style: none;
+    user-select: none;
+    text-decoration: none;
+    appearance: none;
+    background: none;
+    box-shadow: none;
+    overflow: hidden;
+    word-break: break-word;
+    scrollbar-width: thin;
+    scrollbar-color: var(--overlay-color) transparent;
+}
+
+::-webkit-scrollbar {
+    width: var(--scroll-bar-size);
+    height: var(--scroll-bar-size);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: var(--scroll-bar-size);
+    background-color: var(--overlay-color);
+
+    &:hover {
+        background-color: var(--primary-accent-color);
+    }
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+svg {
+    overflow: visible;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    min-width: 640px;
+    min-height: 480px;
+    font-family: 'PlusJakartaSans', 'sans-serif';
+    overflow: auto;
+
+    body {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(41deg, var(--primary-background-color) 0%, var(--secondary-background-color) 100%);
+
+        :global(#app) {
+            position: relative;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+
+            .toasts-container {
+                position: absolute;
+                top: calc(1.2 * var(--horizontal-nav-bar-size));
+                right: 0;
+                bottom: calc(1.2 * var(--horizontal-nav-bar-size));
+                left: auto;
+                z-index: 1;
+                padding: 0 calc(0.5 * var(--horizontal-nav-bar-size));
+                overflow-y: auto;
+                scrollbar-width: none;
+                pointer-events: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+
+            .router {
+                width: 100%;
+                height: 100%;
+            }
+
+            .loader-container, .error-container {
+                width: 100%;
+                height: 100%;
+                background-color: @color-background-dark2;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: @xxlarge) {
+    html {
+        font-size: 18px;
+    }
+}
+
+@media only screen and (max-width: @xxlarge) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (max-width: @large) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width: @medium) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: @xsmall) {
+    html {
+        min-width: inherit;
+        min-height: inherit;
+    }
+}
