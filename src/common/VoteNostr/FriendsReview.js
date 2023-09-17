@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 // Copyright (C) 2017-2023 Smart code 203358507
+/* eslint-disable react/prop-types */
 
 const React = require('react');
 const PropTypes = require('prop-types');
