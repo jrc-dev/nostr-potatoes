@@ -5,6 +5,10 @@
 
 **Nostr Potatoes** is a unique client movie and series review aggregator that empowers users to curate and discover reviews based on the preferences of people they follow. Distinguishing itself from traditional and centralized platforms like IMDB and Rotten Tomatoes, Nostr Potatoes is built on the [**Nostr Protocol**](https://github.com/nostr-protocol/nostr), a decentralized open protocol,censorship-resistant global "social" network. This approach enhances trustworthiness and aligns reviews more closely with your personal preferences and values.
 
+# Demo
+
+https://jrc-dev.github.io/nostr-potatoes/
+
 ## Key Features
 
 - **Decentralization:** Operates on the Nostr Protocol, ensuring that no central authority controls the content or reviews. Decentralization fosters real diversity and independence.
@@ -61,6 +65,10 @@ npm run build
 ## License
 
 Nostr Potatoes code is available under GPLv2 license. See the [LICENSE](/LICENSE.md) file in the project for more information.
+
+## Stremio
+
+This application is a fork of the [stremio-web](https://github.com/Stremio/stremio-web) project, nothing here has anything to do with the creators of the project, I only used it to make this demo works.
 
 ## Features to Implement
 
