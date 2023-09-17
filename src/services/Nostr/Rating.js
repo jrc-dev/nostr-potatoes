@@ -14,11 +14,11 @@ let averageCount = 0; //TODO: Temporary
 let extensionActive = true; //TODO: Temporary
 
 relay.on('connect', async () => {
-    //console.log(`connected to ${relay.url}`);
+    //console.log(`Connected to ${relay.url}`);
 });
 
 relay.on('error', () => {
-    //console.err(`failed to connect to ${relay.url}`);
+    //console.err(`Failed to connect to ${relay.url}`);
 });
 
 function Rating() {
