@@ -2,9 +2,9 @@
 // Copyright JRC DEV 2017-2023
 
 const Wallet = require('./Wallet');
-const Review = require('./Review');
+const Rating = require('./Rating');
 
 module.exports = {
     Wallet,
-    Review
+    Rating
 };

@@ -2,11 +2,11 @@
 
 const VoteNostr = require('./VoteNostr');
 const ShareNote = require('./ShareNote');
-const FriendsReview = require('./FriendsReview');
+const FriendsRating = require('./FriendsRating');
 
 module.exports = {
     VoteNostr,
     ShareNote,
-    FriendsReview
+    FriendsRating
 };
 

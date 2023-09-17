@@ -16,7 +16,7 @@ const ActionButton = require('./ActionButton');
 const MetaLinks = require('./MetaLinks');
 const MetaPreviewPlaceholder = require('./MetaPreviewPlaceholder');
 const styles = require('./styles');
-const { VoteNostr, ShareNote, FriendsReview } = require('stremio/common/VoteNostr');
+const { VoteNostr, ShareNote, FriendsRating } = require('stremio/common/VoteNostr');
 const { Nostr } = require('stremio/services');
 require('winbox/dist/css/winbox.min.css');
 require('./winbox.css');
@@ -35,7 +35,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
     const [criticsModalOpen, openCriticsModal, closeCriticsModal] = useBinaryState(false);
     const [windowBox, openWinBox, closeWinBox] = useBinaryState(false);
     const [_, setData] = React.useState(null);
-    const [totalReview, setTotalReviews] = React.useState(0);
+    const [totalRating, setTotalRating] = React.useState(0);
 
     const handleOpenVoteModalClick = async () => {
         openVoteModal();
@@ -110,12 +110,12 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
             href: 'https://www.stremio.com/warning}'
         });
         setData(Date.now());
-        Nostr.Review.calculateAverage({ id }).then((average) => {
+        Nostr.Rating.calculateAverage({ id }).then((average) => {
             linksGroups.set('nostr', {
                 label: average.toFixed(1),
                 href: 'https://www.stremio.com/warning}'
             });
-            setTotalReviews(Nostr.Review.getTotalReviews());
+            setTotalRating(Nostr.Rating.getTotalRating());
             setData(Date.now());
         });
     };
@@ -292,7 +292,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                     !compact && <ActionButton
                         className={styles['action-button']}
                         icon={'megaphone'}
-                        label={'Critics' + (totalReview > 0 ? ` (${totalReview})` : '')}
+                        label={'Critics' + (totalRating > 0 ? ` (${totalRating})` : '')}
                         tabIndex={compact ? -1 : 0}
                         onClick={handleOpenCriticsModalClick}
                     />
@@ -347,7 +347,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                 }
                 {
                     voteModalOpen ?
-                        <ModalDialog title={t('Review')} onCloseRequest={closeVoteModal}>
+                        <ModalDialog title={t('Rating')} onCloseRequest={closeVoteModal}>
                             <VoteNostr
                                 className={styles['share-prompt']}
                                 id={id}
@@ -378,7 +378,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                 {
                     criticsModalOpen ?
                         <ModalDialog title={t('Friends Audience')} onCloseRequest={closeCriticsModal} >
-                            <FriendsReview/>
+                            <FriendsRating/>
                         </ModalDialog>
                         :
                         null

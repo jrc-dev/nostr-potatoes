@@ -8,11 +8,11 @@ const { Nostr } = require('stremio/services');
 const Button = require('stremio/common/Button');
 const styles = require('./styles');
 
-const FriendsReview = () => {
-    const getFriendsReviews = Nostr.Review.getFriendsReviews();
-    const average = Nostr.Review.getAverage();
+const FriendsRating = () => {
+    const getFriendsRating = Nostr.Rating.getFriendsRating();
+    const average = Nostr.Rating.getAverage();
 
-    const FriendsReviewRow = ({ friend }) => {
+    const FriendsRatingRow = ({ friend }) => {
         return <li key={friend.pubkey}>
             <Button className={styles['user-info-container']} href={`https://primal.net/p/${friend.pubkey}`} target={'_blank'}>
                 <div
@@ -60,7 +60,7 @@ const FriendsReview = () => {
                                     {average.toFixed(1)}
                                 </div>
                             </div>
-                            <div className={styles['email-label']}>{`${getFriendsReviews.length} friends`}</div>
+                            <div className={styles['email-label']}>{`${getFriendsRating.length} friends`}</div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ const FriendsReview = () => {
                                     {average.toFixed(1)}
                                 </div>
                             </div>
-                            <div className={styles['email-label']}>{`${getFriendsReviews.length} cinephile friends`}</div>
+                            <div className={styles['email-label']}>{`${getFriendsRating.length} cinephile friends`}</div>
                         </div>
                     </div>
                 </div>
@@ -83,12 +83,12 @@ const FriendsReview = () => {
 
             <ul>
                 {
-                    getFriendsReviews.map((friend, index) => (
-                        <FriendsReviewRow key={index} friend={friend} />
+                    getFriendsRating.map((friend, index) => (
+                        <FriendsRatingRow key={index} friend={friend} />
                     ))
                 }
                 {
-                    getFriendsReviews.length === 0 && (
+                    getFriendsRating.length === 0 && (
                         <div className={styles['user-noinfo-details']}>No ratings found!</div>
                     )
                 }
@@ -97,10 +97,10 @@ const FriendsReview = () => {
     );
 };
 
-FriendsReview.propTypes = {
+FriendsRating.propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
     closeShareModal: PropTypes.func
 };
 
-module.exports = FriendsReview;
+module.exports = FriendsRating;

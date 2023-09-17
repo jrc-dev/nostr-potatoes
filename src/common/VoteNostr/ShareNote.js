@@ -22,7 +22,7 @@ const ShareNote = ({ className, id, name, year, background, closeShareModal }) =
                 return;
             }
             setPublishing(true);
-            const result = await Nostr.Review.postReview({ id, name, year, background, content });
+            const result = await Nostr.Rating.postReview({ id, name, year, background, content });
             if (result) {
                 closeShareModal();
                 toast.show({
@@ -49,9 +49,8 @@ const ShareNote = ({ className, id, name, year, background, closeShareModal }) =
                         style={{ marginTop: '10px', marginBottom: '20px', color: 'white', border: 'solid 1px', borderRadius: '5px' }}
                         rows='7'
                         cols='46'
-                        defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: 🔟! ✨ #NostrPotatoes🎥🥔😁 \n ${background}`}
+                        defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: 🔟! ✨ @NostrPotatoes🎥🥔😁 #NostrPotatoes \n\n ${background}`}
                     />
-
                     <div className={styles['buttons-container']}>
                         <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Reload'} onClick={handlePublishClick} disabled={publishing}>
                             <div className={styles['label']}>{t('Publish')}</div>

@@ -43,7 +43,7 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
             setVoting(true);
             setLoading(true);
             const content = document.getElementById('textareaReview').value;
-            const result = await Nostr.Review.rate({ id, name, year, background, rating, content, postReview: checked });
+            const result = await Nostr.Rating.rate({ id, name, year, background, rating, content, postReview: checked });
             if (result) {
                 closeVoteModal();
                 toast.show({
@@ -68,12 +68,12 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
         if (window.confirm(t('Are you sure you want to remove your review?'))) {
             try {
                 setVoting(true);
-                const result = await Nostr.Review.remove({ id });
+                const result = await Nostr.Rating.remove({ id });
                 if (result.ok) {
                     closeVoteModal();
                     toast.show({
                         type: 'success',
-                        title: 'Review removed',
+                        title: 'Rating removed',
                         message: result.message,
                         timeout: 4000,
                         dataset: {
@@ -101,7 +101,7 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
 
     React.useEffect(() => {
         setLoading(true);
-        Nostr.Review.getRate({ id }).then((rate) => {
+        Nostr.Rating.getRate({ id }).then((rate) => {
             setLoading(false);
             if (rate === 0) {
                 return;
@@ -177,7 +177,7 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
                             rows='4'
                             cols='46'
                             disabled={!checked || reviewed}
-                            defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: ${getEmoji(rating)}! ✨ #NostrPotatoes🎥🥔😁 \n ${background}`}
+                            defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: ${getEmoji(rating)}! ✨ @NostrPotatoes🎥🥔😁 #NostrPotatoes \n\n ${background}`}
                         />
                         <div style={{ marginTop: '10px', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
                             <span style={{ marginRight: '10px', color: 'white' }}>Share this review on my feed: </span>

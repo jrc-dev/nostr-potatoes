@@ -21,7 +21,7 @@ const NavMenuContent = ({ onClick }) => {
     const [fullscreen, requestFullscreen, exitFullscreen] = useFullscreen();
     //Effect on component mount, set profile from nostr profile
     React.useEffect(() => {
-        Nostr.Review.getProfile().then((profileNostr) => {
+        Nostr.Rating.getProfile().then((profileNostr) => {
             if (profileNostr) {
                 profile.auth = { user: { avatar: profileNostr?.picture, email: profileNostr?.name } };
                 setData(new Date().getTime());
@@ -76,7 +76,7 @@ const NavMenuContent = ({ onClick }) => {
                 </Button>
             </div>
             <div className={styles['nav-menu-section']}>
-                <Button className={styles['nav-menu-option-container']} title={ t('SETTINGS') } href={'#/settings'}>
+                <Button className={styles['nav-menu-option-container']} title={ t('SETTINGS') } onClick={() => window.alert('Not implemented')}>
                     <Icon className={styles['icon']} name={'settings'} />
                     <div className={styles['nav-menu-option-label']}>{ t('SETTINGS') }</div>
                 </Button>
