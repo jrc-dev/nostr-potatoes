@@ -68,7 +68,7 @@ function mine(event, difficulty, timeout = 5) {
         throw new Error(`difficulty must be an integer between 0 and ${max}`);
     }
     // continue with mining
-    let n = Math.BigInt(0);
+    let n = BigInt(0);
     event.tags.unshift(['nonce', n.toString(), `${difficulty}`]);
 
     const until = Math.floor(Date.now() * 0.001) + timeout;

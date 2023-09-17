@@ -29,7 +29,9 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
     const ratingChanged = (newRating) => {
         setRating(newRating);
         setScaleFactor(1 + (newRating / 20));
-        document.getElementById('textareaReview').value = document.getElementById('textareaReview').value.replace(/My verdict:\s*[^]*\s*!/g, `My verdict: ${getEmoji(newRating)}!`);
+        if(document.getElementById('textareaReview')) {
+            document.getElementById('textareaReview').value = document.getElementById('textareaReview').value.replace(/My verdict:\s*[^]*\s*!/g, `My verdict: ${getEmoji(newRating)}!`);
+        }
     };
 
     const handleChangePostReview = () => {
@@ -101,7 +103,6 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
         setLoading(true);
         Nostr.Review.getRate({ id }).then((rate) => {
             setLoading(false);
-            setReviewed(false);
             if (rate === 0) {
                 return;
             }
@@ -134,7 +135,7 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
     return (
         <div className={classnames(className, styles['share-prompt-container'])}>
 
-            <div className={classnames(className, styles['ipc-rating-display'])} style={{ transform: `scale(${scaleFactor})`, transition: 'transform 200ms ease-out 0s' }}>
+            <div className={classnames(className, styles['ipc-rating-display'])} style={{ transform: `scale(${scaleFactor})`, transition: 'transform 200ms ease-out 0s', top: `${reviewed || loading ? '30%' : '17%'}` }}>
                 <svg xmlns='http://www.w3.org/2000/svg' width='85' height='81' className={classnames(className, styles['ipc-rating-display__star'])} viewBox='0 0 85 81' fill='currentColor' role='presentation'>
                     <path d='M29.4278383,26.4913549 L2.77970363,28.6432143 L2.63541119,28.6580541 C0.066865676,28.979767 -0.941953299,32.2222005 1.05754936,33.9345403 L21.3502824,51.3123553 L15.1650027,77.2797478 L15.1355051,77.4163845 C14.6437005,79.9569202 17.4230421,81.9201545 19.6736611,80.5499671 L42.5,66.6529451 L65.3263389,80.5499671 L65.447392,80.6201968 C67.7156822,81.8722123 70.4448402,79.8400226 69.8349973,77.2797478 L63.6489629,51.3123553 L83.9424506,33.9345403 L84.0504483,33.8378644 C85.9390285,32.0703808 84.8461128,28.855226 82.2202964,28.6432143 L55.571407,26.4913549 L45.2865041,1.85440279 C44.2543406,-0.618134262 40.7456594,-0.618134262 39.7134959,1.85440279 L29.4278383,26.4913549 Z'></path>
                 </svg>
@@ -168,24 +169,29 @@ const VoteNostr = ({ className, id, name, year, background, closeVoteModal }) =>
                 }
 
             </div>
+            {
+                reviewed === false && loading === false && (
+                    <div>
+                        <textarea id='textareaReview'
+                            style={{ marginTop: '10px', color: 'white', border: 'solid 1px', borderRadius: '5px' }}
+                            rows='4'
+                            cols='46'
+                            disabled={!checked || reviewed}
+                            defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: ${getEmoji(rating)}! ✨ #NostrPotatoes🎥🥔😁 \n ${background}`}
+                        />
+                        <div style={{ marginTop: '10px', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
+                            <span style={{ marginRight: '10px', color: 'white' }}>Share this review on my feed: </span>
+                            <Switch onChange={handleChangePostReview} checked={checked} onColor='#7b5bf5' handleDiameter={1} height={20} width={40} disabled={reviewed} />
+                        </div>
 
-            <textarea id='textareaReview'
-                style={{ marginTop: '10px', color: 'white', border: 'solid 1px', borderRadius: '5px' }}
-                rows='4'
-                cols='46'
-                disabled={!checked || reviewed}
-                defaultValue={`🎬 Just watched ${name} 🍿 \n\n My verdict: ${getEmoji(rating)}! ✨ #NostrPotatos🎥🥔😁 \n ${background}`}
-            />
-            <div style={{ marginTop: '10px', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
-                <span style={{ marginRight: '10px', color: 'white' }}>Share this review on my feed: </span>
-                <Switch onChange={handleChangePostReview} checked={checked} onColor='#7b5bf5' handleDiameter={1} height={20} width={40} disabled={reviewed} />
-            </div>
-
-            <div className={styles['buttons-container']}>
-                <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Reload'} onClick={handleVoteClick} disabled={rating === 0 || voting || reviewed}>
-                    <div className={styles['label']}>{t('Rate')}</div>
-                </Button>
-            </div>
+                        <div className={styles['buttons-container']}>
+                            <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Reload'} onClick={handleVoteClick} disabled={rating === 0 || voting || reviewed}>
+                                <div className={styles['label']}>{t('Rate')}</div>
+                            </Button>
+                        </div>
+                    </div>
+                )
+            }
 
             <div className={styles['buttons-container']}>
                 <Button className={classnames(styles['button-container'], styles['uninstall-button-container'])} onClick={handleRemoveVoteClick} disabled={rating === 0 || voting || !reviewed} title={'Remove rating'}>

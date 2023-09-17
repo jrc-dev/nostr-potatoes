@@ -16,7 +16,7 @@ const ActionButton = require('./ActionButton');
 const MetaLinks = require('./MetaLinks');
 const MetaPreviewPlaceholder = require('./MetaPreviewPlaceholder');
 const styles = require('./styles');
-const VoteNostr = require('stremio/common/VoteNostr');
+const { VoteNostr, ShareNote, FriendsReview } = require('stremio/common/VoteNostr');
 const { Nostr } = require('stremio/services');
 require('winbox/dist/css/winbox.min.css');
 require('./winbox.css');
@@ -32,14 +32,17 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
     const { t } = useTranslation();
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const [voteModalOpen, openVoteModal, closeVoteModal] = useBinaryState(false);
+    const [criticsModalOpen, openCriticsModal, closeCriticsModal] = useBinaryState(false);
     const [windowBox, openWinBox, closeWinBox] = useBinaryState(false);
     const [_, setData] = React.useState(null);
+    const [totalReview, setTotalReviews] = React.useState(0);
 
     const handleOpenVoteModalClick = async () => {
-        const getPublicKey = await Nostr.Wallet.getPublicKey();
-        if (getPublicKey) {
-            openVoteModal();
-        }
+        openVoteModal();
+    };
+
+    const handleOpenCriticsModalClick = async () => {
+        openCriticsModal();
     };
 
     const handleOpenWinBoxClick = async () => {
@@ -112,6 +115,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                 label: average.toFixed(1),
                 href: 'https://www.stremio.com/warning}'
             });
+            setTotalReviews(Nostr.Review.getTotalReviews());
             setData(Date.now());
         });
     };
@@ -254,7 +258,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                 {
                     !compact && <ActionButton
                         className={styles['action-button']}
-                        iconCustom={'🪺'}
+                        icon={'actors'}
                         label={'Start Nest'}
                         tabIndex={compact ? -1 : 0}
                         onClick={handleOpenWinBoxClick}
@@ -285,6 +289,15 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                         null
                 }
                 {
+                    !compact && <ActionButton
+                        className={styles['action-button']}
+                        icon={'megaphone'}
+                        label={'Critics' + (totalReview > 0 ? ` (${totalReview})` : '')}
+                        tabIndex={compact ? -1 : 0}
+                        onClick={handleOpenCriticsModalClick}
+                    />
+                }
+                {
                     typeof showHref === 'string' && compact ?
                         <ActionButton
                             className={styles['action-button']}
@@ -297,15 +310,15 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                         null
                 }
                 {
-                    shareModalOpen ?
-                        <ModalDialog title={t('CTX_SHARE')} onCloseRequest={closeShareModal}>
-                            <SharePrompt
-                                className={styles['share-prompt']}
-                                url={linksGroups.get(CONSTANTS.SHARE_LINK_CATEGORY).href}
-                            />
-                        </ModalDialog>
-                        :
-                        null
+                    // shareModalOpen ?
+                    //     <ModalDialog title={t('CTX_SHARE')} onCloseRequest={closeShareModal}>
+                    //         <SharePrompt
+                    //             className={styles['share-prompt']}
+                    //             url={linksGroups.get(CONSTANTS.SHARE_LINK_CATEGORY).href}
+                    //         />
+                    //     </ModalDialog>
+                    //     :
+                    //     null
                 }
                 {
                     linksGroups.has(CONSTANTS.SHARE_LINK_CATEGORY) && !compact ?
@@ -347,6 +360,29 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                         :
                         null
                 }
+                {
+                    shareModalOpen ?
+                        <ModalDialog title={t('Share on Nostr')} onCloseRequest={closeShareModal} >
+                            <ShareNote
+                                className={styles['share-prompt']}
+                                id={id}
+                                name={name}
+                                year={released instanceof Date && !isNaN(released.getTime()) ? released.getFullYear() : ''}
+                                background={background ? background : logo}
+                                closeShareModal={closeShareModal}
+                            />
+                        </ModalDialog>
+                        :
+                        null
+                }
+                {
+                    criticsModalOpen ?
+                        <ModalDialog title={t('Friends Audience')} onCloseRequest={closeCriticsModal} >
+                            <FriendsReview/>
+                        </ModalDialog>
+                        :
+                        null
+                }
             </div>
             {
                 windowBox && (
@@ -366,7 +402,7 @@ const MetaPreview = ({ className, compact, id, name, logo, background, runtime, 
                         }}
                     >
                         <div>
-                            <iframe src='https://nostrnests.com/nostrpotatos' ></iframe>
+                            <iframe src='https://nostrnests.com/nostrpotatoes' ></iframe>
                         </div>
                     </WinBox>
                 )

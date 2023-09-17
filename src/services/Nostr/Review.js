@@ -7,8 +7,10 @@ const { verifySignature, validateEvent, relayInit } = require('nostr-tools');
 
 const rateChangedEvent = new Event('rateChanged');
 const relay = relayInit('wss://nos.lol/'); //wss://purplepag.es
-//let profile = {};
+let myProfile = null;
+let friendsRates = [];
 let contactList = []; //TODO: Temporary
+let averageCount = 0; //TODO: Temporary
 
 relay.on('connect', async () => {
     //console.log(`connected to ${relay.url}`);
@@ -26,18 +28,25 @@ relay.on('error', () => {
 function Review() {
 
     this.rate = async function (movie) {
-        await relay.connect();
-        const pubkey = await window.nostr.getPublicKey();
-        movie.tmdbId = await tmdbId(movie.id);
-        const eventAlreadyRated = await findReviewById({ movieId: movie.id, pubkey });
-        if (eventAlreadyRated) {
-            await removeById({ movieId: movie.id, pubkey }, 'updating');
-        }
-        const resultRate = await rate(movie);
-        if (resultRate && movie.postReview) {
-            await postReview(movie);
-        }
-        return resultRate;
+        const rating = async (resolve) => {
+            await relay.connect();
+            const pubkey = await window.nostr.getPublicKey();
+            movie.tmdbId = await tmdbId(movie.id);
+            let postReviewId = '';
+            const eventAlreadyRated = await findReviewById({ movieId: movie.id, pubkey });
+            if (eventAlreadyRated) {
+                await removeById({ movieId: movie.id, pubkey }, 'updating');
+            }
+            if (movie.postReview) {
+                postReviewId = await postReview(movie, pubkey);
+            }
+            movie.postReviewId = postReviewId;
+            const resultRate = await rate(movie, pubkey);
+            if (resultRate) {
+                resolve(resultRate);
+            }
+        };
+        return new Promise(rating);
     };
 
     this.remove = async function (movie) {
@@ -47,7 +56,14 @@ function Review() {
         return result;
     };
 
-    this.get = async function (movie) {
+    this.postReview = async function (movie) {
+        await relay.connect();
+        const pubkey = await window.nostr.getPublicKey();
+        await postReview(movie, pubkey);
+        return true;
+    };
+
+    this.getReview = async function (movie) {
         await relay.connect();
         const pubkey = await window.nostr.getPublicKey();
         const result = await findReviewById({ movieId: movie.id, pubkey });
@@ -66,7 +82,35 @@ function Review() {
         await relay.connect();
         const pubkey = await window.nostr.getPublicKey();
         const result = await calculateAverage({ movieId: movie.id, pubkey });
+        averageCount = result;
+        setTimeout(() => {
+            fillProfiles({ pubkey }).then();
+        }, 10);
         return result;
+    };
+
+    this.getProfile = async function () {
+        await relay.connect();
+        if (myProfile) {
+            return myProfile.profile;
+        } else {
+            const pubkey = await window.nostr.getPublicKey();
+            myProfile = { profile: await getProfile({ pubkey }) };
+            return myProfile.profile;
+        }
+    };
+
+    this.getTotalReviews = function () {
+        return friendsRates.length;
+    };
+
+    this.getAverage = function () {
+        return averageCount;
+    };
+
+    this.getFriendsReviews = function () {
+        //return Array.from({ length: 50 }, () => [...friendsRates]).flat();
+        return friendsRates;
     };
 
     this.subscribeRateEvents = async function (movie) {
@@ -84,20 +128,20 @@ function normalizeReview(review) {
     return Math.min(1, Math.max(0, review / 10));
 }
 
-async function rate(movie) {
+async function rate(movie, pubkey) {
     let event = {
         kind: 1985,
-        pubkey: `${await window.nostr.getPublicKey()}`,
+        pubkey: pubkey,
         tags: [
             ['t', movie.id.toString()],
-            ['l', 'nostr-potatos/review', movie.id, `{'quality': ${normalizeReview(movie.rating)}}`],
+            ['l', 'nostr-potatoes/review', movie.id, `{"quality": ${normalizeReview(movie.rating)}}`],
             ['l', 'ImdbId', movie.id.toString()],
             ['l', 'tmdbId', movie.tmdbId],
             ['l', 'name', movie.name],
-            ['l', 'year', movie.year.toString()]
+            ['l', 'year', movie.year.toString()],
+            ['l', 'postReviewId', movie?.postReviewId],
         ],
         content: `Just publishing the metadata review for ${movie.name}.`
-
     };
     event = await Wallet.mineEvent(event, 15, 5000);
     event = await Wallet.signEvent(event);
@@ -109,10 +153,10 @@ async function rate(movie) {
     }
 }
 
-async function postReview(movie) {
+async function postReview(movie, pubkey) {
     let event = {
         kind: 1,
-        pubkey: `${await window.nostr.getPublicKey()}`,
+        pubkey: pubkey,
         created_at: Math.round(Date.now() / 1000),
         tags: [
             ['r', movie.background],
@@ -154,7 +198,7 @@ async function removeById(e, act = 'removing') {
             ['e', event.id],
             ['t', e.movieId.toString()]
         ],
-        content: `just ${act} event review`,
+        content: `Just ${act} event review.`,
         created_at: Math.round(Date.now() / 1000)
     };
     eventDelete = await Wallet.signEvent(eventDelete);
@@ -246,7 +290,7 @@ function watchRateEvents(e) {
 function getReviewQuality(review) {
     let rate = 0;
     if (!review) return rate;
-    const lArray = review.tags.find((tag) => tag[0] === 'l' && tag[1] === 'nostr-potatos/review');
+    const lArray = review.tags.find((tag) => tag[0] === 'l' && tag[1] === 'nostr-potatoes/review');
     if (lArray && lArray.length > 3) {
         const jsonStr = lArray[3];
         try {
@@ -280,11 +324,14 @@ async function calculateAverage(e) {
     // Wait for all asynchronous operations to complete
     const myFriendsReviews = await Promise.all(myFriendsReviewPromises);
     let totalFriendsReviews = 0;
+    friendsRates = [];
     const sumOfRates = myFriendsReviews.reduce((accumulator, review) => {
         const rate = getReviewQuality(review);
         if (review !== null && rate > 0 && verifySignature(review)) {
             totalFriendsReviews++;
-            return accumulator + rate;
+            const value = accumulator + rate;
+            friendsRates.push({ profile: [], rate, pubkey: review.pubkey, review });
+            return value;
         }
         return accumulator;
     }, 0);
@@ -295,19 +342,27 @@ async function calculateAverage(e) {
 
 }
 
-// async function getProfile(e) {
-//     if (profile) return profile;
-//     const profileMetada = await relay.get(
-//         {
-//             kinds: [0],
-//             authors: [e.pubkey]
-//         }
-//     );
-//     if (profileMetada && profileMetada.content) {
-//         profile = JSON.parse(profileMetada.content);
-//     }
-//     return profile;
-// }
+async function getProfile(e) {
+    const profileMetada = await relay.get(
+        {
+            kinds: [0],
+            authors: [e.pubkey]
+        }
+    );
+    if (profileMetada && profileMetada.content) {
+        return JSON.parse(profileMetada.content);
+    }
+    return null;
+}
+
+async function fillProfiles(e) {
+    for (let i = 0; i < friendsRates.length; i++) {
+        friendsRates[i].profile = await getProfile(friendsRates[i]);
+        if (e.pubkey === friendsRates[i].pubkey) {
+            myProfile = friendsRates[i];
+        }
+    }
+}
 
 async function getContactList(e) {
     if (contactList.length !== 0) return contactList;

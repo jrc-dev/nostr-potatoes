@@ -1,7 +1,7 @@
 {
-    "short_name": "Stremio",
-    "name": "Stremio Web",
-    "description": "Freedom To Stream",
+    "short_name": "Nostr Potatoes",
+    "name": "Nostr Potatoes",
+    "description": "Movie and series review aggregator on Nostr Protocol",
     "icons": [
         {
             "src": "favicons/favicon.ico",

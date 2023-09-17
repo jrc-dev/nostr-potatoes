@@ -10,7 +10,7 @@
         flex-direction: column;
         z-index: 0;
         position: fixed;
-        top: 10rem;
+        top: 30%;
         left: 0;
         width: 100%;
 
@@ -148,5 +148,123 @@
         }
     }
 
+}
+
+.user-info-container {
+    display: flex;
+    padding: 1.2rem 1rem;
+    border-radius: var(--border-radius);
+
+    .avatar-container {
+        flex: none;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-origin: content-box;
+        background-clip: content-box;
+        opacity: 0.9;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: var(--overlay-color);
+    }
+
+    .user-info-details {
+        flex: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 1rem;
+
+        .email-container {
+            flex: none;
+            margin-bottom: 0.5rem;
+
+            .email-label {
+                flex: 1;
+                color: var(--primary-foreground-color);
+                display: flex;
+                align-items: center;
+
+                .rate {
+                    padding-top: 4px;
+                    padding-left: 5px;
+                }
+            }
+        }
+    }
+}
+
+.user-noinfo-details {
+    display: flex;
+    padding: 2.5rem 5rem;
+    border-radius: var(--border-radius);
+    color: var(--primary-foreground-color);
+}
+
+.score-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-content: space-around;
+
+    .score-container-col {
+        display: flex;
+        padding: 1.5rem 1rem;
+        border-radius: var(--border-radius);
+        max-width: 50%;
+
+        .avatar-container {
+            flex: none;
+            height: 4rem;
+            width: 4rem;
+            border-radius: 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-origin: content-box;
+            background-clip: content-box;
+            opacity: 0.9;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: var(--overlay-color);
+        }
+
+        .user-info-details {
+            flex: auto;
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+
+            .email-container {
+                flex: none;
+                margin-bottom: 0.5rem;
+
+                .email-label {
+                    flex: 1;
+                    color: var(--primary-foreground-color);
+                    display: flex;
+                    align-items: center;
+
+                    .rate {
+                        font-size: 40px;
+                        letter-spacing: .016em;
+                        font-family: "Franklin Gothic",-apple-system,BlinkMacSystemFont,"PT Sans",Arial,sans-serif;
+                    }
+                }
+            }
+        }
+
+        .critics-info-details {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    }
 
 }
