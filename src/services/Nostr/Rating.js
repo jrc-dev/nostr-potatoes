@@ -148,7 +148,7 @@ async function rate(movie, pubkey) {
             ['l', 'year', movie.year.toString()],
             ['l', 'postRatingId', movie?.postRatingId],
         ],
-        content: `Just publishing the metadata rating for ${movie.name}.`
+        content: `2/2. Required Event, to confirm your rating ${movie.name}. If you don't confirm, your rating is ignored.`,
     };
     event = await Wallet.mineEvent(event, 15, 5000);
     event = await Wallet.signEvent(event);
