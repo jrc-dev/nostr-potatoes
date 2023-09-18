@@ -120,7 +120,7 @@ function Rating() {
 async function getPublicKey() {
     if (!window.nostr) {
         if (extensionActive) {
-            window.alert('Nostr extension is not loaded!');
+            window.alert('Nostr extension is not loaded, use desktop version!');
         }
         extensionActive = false;
         return;
