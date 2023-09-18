@@ -7,7 +7,7 @@
 
 # Demo
 
-https://jrc-dev.github.io/nostr-potatoes/
+https://jrc-dev.github.io/nostr-potatoes/development/
 
 ## Key Features
 
