@@ -141,10 +141,11 @@ async function rate(movie, pubkey) {
         pubkey: pubkey,
         tags: [
             ['t', movie.id.toString()],
+            ['r', movie.id.toString()],
             ['l', 'nostr-movie/rating', movie.id, `{"quality": ${normalizeRating(movie.rating)}}`],
-            ['l', 'ImdbId', movie.id.toString()],
-            ['l', 'tmdbId', movie.tmdbId],
-            ['l', 'name', movie.name],
+            ['r', 'ImdbId', movie.id.toString()],
+            ['r', 'tmdbId', movie.tmdbId],
+            ['r', 'name', movie.name],
             ['l', 'year', movie.year.toString()],
             ['l', 'postRatingId', movie?.postRatingId],
         ],
@@ -164,6 +165,7 @@ async function postReview(movie, pubkey) {
     if (movie.content) {
         movie.content = movie.content.replace('@NostrPotatoes', 'nostr:npub12zxgk9lpn2l5uzgtcraly54luqpa0nyv6a6jmuep298kcwfaru0qrg3sj2');
     }
+    const hashtags = extractHashtags(movie.content);
     let event = {
         kind: 1,
         pubkey: pubkey,
@@ -171,7 +173,8 @@ async function postReview(movie, pubkey) {
         tags: [
             ['r', movie.background],
             ['t', movie.id.toString()],
-            ['p', '508c8b17e19abf4e090bc0fbf252bfe003d7cc8cd7752df321514f6c393d1f1e']
+            ['p', '508c8b17e19abf4e090bc0fbf252bfe003d7cc8cd7752df321514f6c393d1f1e'],
+            ...hashtags
         ],
         content: movie.content
     };
@@ -390,6 +393,19 @@ async function getContactList(e) {
 async function tmdbId(id) {
     const tmdbId = await Tmdb.getTmdbIdFromImdbId(id);
     return tmdbId;
+}
+
+function extractHashtags(text) {
+    // Use a regular expression to find all hashtags in the text
+    const hashtags = text.match(/#\w+/g);
+    // Check if hashtags were found
+    if (hashtags) {
+        // Map the hashtags to remove '#' and convert to lowercase
+        const lowercaseHashtags = hashtags.map((tag) => ['t', tag.slice(1).toLowerCase()]);
+        return lowercaseHashtags;
+    } else {
+        return [];
+    }
 }
 
 module.exports = new Rating();

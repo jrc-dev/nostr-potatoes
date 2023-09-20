@@ -4,7 +4,7 @@ const React = require('react');
 const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const { useTranslation } = require('react-i18next');
-const { MainNavBars, MetaRow, LibItem, MetaItem, StreamingServerWarning, useStreamingServer, withCoreSuspender, getVisibleChildrenRange } = require('stremio/common');
+const { MainNavBars, MetaRow, LibItem, MetaItem, withCoreSuspender, getVisibleChildrenRange } = require('stremio/common');
 const useBoard = require('./useBoard');
 const useContinueWatchingPreview = require('./useContinueWatchingPreview');
 const styles = require('./styles');
@@ -13,7 +13,6 @@ const THRESHOLD = 5;
 
 const Board = () => {
     const { t } = useTranslation();
-    const streamingServer = useStreamingServer();
     const continueWatchingPreview = useContinueWatchingPreview();
     const [board, loadBoardRows] = useBoard();
     const boardCatalogsOffset = continueWatchingPreview.items.length > 0 ? 1 : 0;
@@ -91,12 +90,6 @@ const Board = () => {
                     })}
                 </div>
             </MainNavBars>
-            {
-                streamingServer.settings !== null && streamingServer.settings.type === 'Err' ?
-                    <StreamingServerWarning className={styles['board-warning-container']} />
-                    :
-                    null
-            }
         </div>
     );
 };
